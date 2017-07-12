@@ -2,7 +2,9 @@
 =====
 Team 955's robot library containing all general code
 
-[Javadoc's](https://frc-team-955.github.io/Team955RobotLib/)
+[Documentation can be found here](https://frc-team-955.github.io/Team955RobotLib/)
+
+[Example project can be found here](https://github.com/FRC-Team-955/RobotLibExample)
 
 ### Recommended Use
 
