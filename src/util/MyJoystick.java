@@ -11,8 +11,16 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class MyJoystick extends Joystick {
 
+	/**
+	 * Holds the state of each button from the last loop
+	 */
 	private boolean[] lastButtonState;
+	
+	/**
+	 * Holds the state of each button from the current loop
+	 */
 	private boolean[] buttonState;
+	
 	JoystickConfigDefaults config;
 
 	/**

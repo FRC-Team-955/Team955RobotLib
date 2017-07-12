@@ -8,7 +8,9 @@ import util.MyJoystick;
 import util.loops.Loop;
 
 /**
- * Created by Trevor on 5/23/17.
+ * Drive code for basic tank drive system using one controller with two joysticks
+ * 
+ * @author Trevor
  */
 public class Drive {
     protected DriveConfigDefault config;

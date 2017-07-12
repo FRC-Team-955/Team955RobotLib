@@ -18,11 +18,26 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class Looper {
 	
+	/**
+	 * Tells whether the loops are running or not
+	 */
     private boolean running;
-
+    
     private final LoopConfigDefault config;
+    
+    /**
+     * Notifier which is used to schedule the loops with a given dt between each loop
+     */
     private final Notifier notifier;
+    
+    /**
+     * List containing all of the loops to run
+     */
     private final List<Loop> loops;
+    
+    /**
+     * Object used to make sure that threads are synchronized
+     */
     private final Object taskRunningLock = new Object();
     private double timestamp = 0;
     private double dt = 0;
