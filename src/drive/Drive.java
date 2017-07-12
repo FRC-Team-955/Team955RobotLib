@@ -1,10 +1,11 @@
+package drive;
 import com.ctre.CANTalon;
 
 /**
  * Created by Trevor on 5/23/17.
  */
 public class Drive {
-    private DriveConfig config;
+    private DriveConfigDefault config;
     private CANTalon[] leftTalons;
     private CANTalon[] rightTalons;
 
@@ -14,7 +15,7 @@ public class Drive {
 
     private DriveControlStates driveControlState;
 
-    public Drive(DriveConfig config) {
+    public Drive(DriveConfigDefault config) {
         this.config = config;
 
         leftTalons = new CANTalon[config.numMotorsSide];
@@ -57,7 +58,7 @@ public class Drive {
 
             leftTalons[i].set(config.leftId[0]);
             rightTalons[i].set(config.rightId[0]);
+            
         }
     }
-
 }
