@@ -12,22 +12,69 @@ import util.loops.Loop;
  */
 public class Drive {
     protected DriveConfigDefault config;
+    
+    /**
+     * Array containing all talons on the left side of the drivebase.
+     * First element is the master talon, all following are slaves
+     */
     protected CANTalon[] leftTalons;
+    
+    /**
+     * Array containing all talons on the right side of the drivebase.
+     * First element is the master talon, all following are slaves
+     */
     protected CANTalon[] rightTalons;
 
+    /**
+     * Object used to follow a motion profile for the left side
+     */
 	private MotionProfileFollower leftFollower;
+	
+	/**
+	* Object used to follow a motion profile for the right side
+	*/
 	private MotionProfileFollower rightFollower;
 	
 	private MyJoystick joy;
 	
+	/**
+	 * Used for setting left and right side motors when in the OPEN_LOOP_SET mode
+	 */
     private double left, right = 0;
 
+    /** 
+     * Enums that account for all control states for the drive system
+     * 
+     * @author Trevor
+     */
     public enum DriveControlStates {
-        OPEN_LOOP_JOY, MOTION_PROFILE, OPEN_LOOP_SET
+    	/**
+    	 * Open loop control using the joystick
+    	 */
+        OPEN_LOOP_JOY, 
+        
+        /**
+         * Closed loop control mode using motion profile
+         */
+        MOTION_PROFILE, 
+        
+        /**
+         * Open loop control using variables to independently set left and right sides
+         */
+        OPEN_LOOP_SET
     }
 
+    /** 
+     * Holds the control state that the drive system is currently in
+     */
     private DriveControlStates driveControlState;
 
+    /**
+     * Initializes the drive subsystem by setting talons, sensors, pid values, and slaves
+     * 
+     * @param config Config that holds all values, either default or user set, to use
+     * @param joy Joystick object that represents physical joystick to use for driving
+     */
     public Drive(DriveConfigDefault config, MyJoystick joy) {
         this.config = config;
         this.joy = joy;
@@ -79,7 +126,9 @@ public class Drive {
     	rightFollower = new MotionProfileFollower(rightTalons[0], config.pathDt);
     }
     
-    // Main control loop, run at 100hz
+    /**
+     * Main control loop, run at periodically from the Looper class
+     */
  	private final Loop loop = new Loop() {
 
  		@Override
@@ -115,14 +164,29 @@ public class Drive {
  		}
  	};
  	
+ 	/**
+ 	 * Use for starting loop through Looper class
+ 	 * @return main control loop
+ 	 */
  	public Loop getLoop () {
 		return loop;
 	}
     
+ 	/**
+ 	 * Sets left and right drivebase wheels based off of polar coordinates
+ 	 * 
+ 	 * @param rTheta 2 element array that contains a magnitude on a scale of -1 to 1 and a heading in radians
+ 	 */
     public void move(double[] rTheta) {
 		move(rTheta[0], rTheta[1]);
 	}
 
+    /**
+     * Sets left and right drivebase wheels based off of polar coordinates
+     * 
+     * @param r magnitude on a scale of -1 to 1
+     * @param theta heading in radians
+     */
 	public void move(double r, double theta) {
 		double xPos = r * Math.cos(theta);
 		double yPos = r * Math.sin(theta);
@@ -138,6 +202,11 @@ public class Drive {
 		}
 	}
 	
+	/**
+	 * Ramps the speed of the left and right wheels if needed
+	 * @param wantSpeedLeft The wanted speed for the left side
+	 * @param wantSpeedRight The wanted speed for the right side
+	 */
 	public void ramp(double wantSpeedLeft, double wantSpeedRight){
 		if(Math.abs(wantSpeedLeft - leftTalons[0].get()) > config.rampRate){
 			
@@ -168,10 +237,17 @@ public class Drive {
 		}
 	}
 	
+	/**
+	 * Gets the set value to set the talon to when it is in motion profile mode
+	 * @return Set value where 0 - Disable, 1 - Enable, and 2 - Hold
+	 */
 	public int getSetValue() {
 		return leftFollower.getSetValue().value;
 	}
 	
+	/**
+	 * Sets the talons to a mode where they can follow a motion profile
+	 */
 	public void motionProfileMode() {
 		driveControlState = DriveControlStates.MOTION_PROFILE;
 
@@ -185,11 +261,19 @@ public class Drive {
 		rightTalons[0].set(rightFollower.getSetValue().value);
 	}
 	
+	/**
+	 * Sets the talons to a mode where they can be controlled by the joystick
+	 */
 	public void openLoopJoyMode() {
 		driveControlState = DriveControlStates.OPEN_LOOP_JOY;
 		resetToOpenLoop();
 	}
 
+	/**
+	 * Sets the talons to a mode where they can be given a left and a right speed
+	 * @param left Speed for left side on a scale of -1 to 1
+	 * @param right Speed for right side on a scale of -1 to 1
+	 */
 	public void openLoopSetMode(double left, double right) {
 		this.left = left;
 		this.right = right;
@@ -200,6 +284,9 @@ public class Drive {
 		}
 	}
 
+	/**
+	 * Resets the talons so that they're buffer is clear and they can accept PercentVbus commands (-1 to 1)
+	 */
 	private void resetToOpenLoop() {
 		leftTalons[0].changeControlMode(TalonControlMode.PercentVbus);
 		rightTalons[0].changeControlMode(TalonControlMode.PercentVbus);
@@ -208,11 +295,23 @@ public class Drive {
 		rightFollower.reset();
 	}
 	
+	/**
+	 * Starts the motion profile for the loaded paths
+	 */
 	public void startMotionProfile() {
 		leftFollower.startMotionProfile();
 		rightFollower.startMotionProfile();
 	}
 	
+	/**
+	 * Load two paths to be run as a motion profile
+	 * @param left left path as a 2d array such that the first dimension is an array of points, and each point is
+	 * laid out as such {accumulated position, velocity, dt} where accumulated position is in rotations,
+	 * velocity is in rpm, and dt is in ms
+	 * @param right right path as a 2d array such that the first dimension is an array of points, and each point is
+	 * laid out as such {accumulated position, velocity, dt} where accumulated position is in rotations,
+	 * velocity is in rpm, and dt is in ms
+	 */
 	public void setPaths(double[][]left, double[][]right) {
 		leftFollower.setPoints(left);
 		rightFollower.setPoints(right);

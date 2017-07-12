@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 
 /**
- * Created by Trevor on 5/12/2017.
- *
- * Inspired by 254 The Cheesy Poofs
- *
  * This code runs all of the robot's loops. Loop objects are stored in a List
- * object. They are started when the robot powers up and stopped after the
- * match.
+ * object. They should be started when the robot powers up and stopped when 
+ * the match ends in the robot init methods in Robot.java
+ * 
+ * Inspired by 254 The Cheesy Poofs
+ * 
+ * @author Trevor
  */
 public class Looper {
 	
@@ -26,6 +26,10 @@ public class Looper {
     private final Object taskRunningLock = new Object();
     private double timestamp = 0;
     private double dt = 0;
+    
+    /**
+     * runnable that is used to run all of the loops
+     */
     private final Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -42,6 +46,10 @@ public class Looper {
         }
     };
 
+    /**
+     * Initializes looper and gets ready to run
+     * @param config Config object which contains values to be pulled in
+     */
     public Looper(LoopConfigDefault config) {
     	this.config = config;
         notifier = new Notifier(runnable);
@@ -49,12 +57,19 @@ public class Looper {
         loops = new ArrayList<>();
     }
 
+    /**
+     * Adds a given loop the the list to be run periodically
+     * @param loop Loop to be added
+     */
     public synchronized void register(Loop loop) {
         synchronized (taskRunningLock) {
             loops.add(loop);
         }
     }
 
+    /**
+     * Starts the looper at the rate given in the config
+     */
     public synchronized void start() {
         if (!running) {
             System.out.println("Starting loops");
@@ -69,6 +84,9 @@ public class Looper {
         }
     }
 
+    /**
+     * Stops the looper and runs onStop() method for all loops running
+     */
     public synchronized void stop() {
         if (running) {
             System.out.println("Stopping loops");

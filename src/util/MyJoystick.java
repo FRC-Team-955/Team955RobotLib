@@ -16,12 +16,12 @@ public class MyJoystick extends Joystick {
 	JoystickConfigDefaults config;
 
 	/**
-	 * Creates joystick at given port
+	 * Creates joystick with given configuration
 	 * 
-	 * @param portNumber
+	 * @param config Config object that config values are pulled from
 	 */
-	private MyJoystick(int portNumber, JoystickConfigDefaults config) {
-		super(portNumber);
+	public MyJoystick(JoystickConfigDefaults config) {
+		super(config.portNumber);
 
 		this.config = config;
 		lastButtonState = new boolean[config.maxButtons];
@@ -44,7 +44,8 @@ public class MyJoystick extends Joystick {
 	}
 
 	/**
-	 * Calculates joystick position in polar coordinates
+	 * Gives the location of the joystick in the coordinate system (r, theta) where r is the distance from the 
+ 	 * center and theta is the angle the joystick is pointing in radians
 	 * 
 	 * @return magnitude and angle of joystick
 	 */
@@ -66,10 +67,10 @@ public class MyJoystick extends Joystick {
 	}
 
 	/**
-	 * Gives button value
+	 * Gives button value at given id
 	 * 
-	 * @param button the button number on the controller
-	 * @return button value
+	 * @param button the button number on the controller. Use joy.cpl to determine physical button id's
+	 * @return button true if button has been pressed once, accounts for debounce
 	 */
 	public boolean getButton(int button) {
 		return buttonState[button- 1];
@@ -111,13 +112,17 @@ public class MyJoystick extends Joystick {
 		return super.getRawAxis(config.chnRightY);
 	}
 	
+	/**
+     * Checks if the dpad is pressed in the up direction 
+     * @return is the dpad pressed
+     */
 	public boolean getDpadUp() {
     	return super.getPOV(0) == 0;
     }
     
     /**
      * Checks if the dpad is pressed in the right direction 
-     * @return is the dpad is pressed
+     * @return is the dpad pressed
      */
     public boolean getDpadRight() {
     	return super.getPOV(0) == 90;
@@ -125,7 +130,7 @@ public class MyJoystick extends Joystick {
 
     /**
      * Checks if the dpad is pressed in the down direction 
-     * @return is the dpad is pressed
+     * @return is the dpad pressed
      */
     public boolean getDpadDown(){
     	return super.getPOV(0) == 180;
@@ -133,7 +138,7 @@ public class MyJoystick extends Joystick {
     
     /**
      * Checks if the dpad is pressed in the left direction 
-     * @return is the dpad is pressed
+     * @return is the dpad pressed
      */
     public boolean getDpadLeft(){
     	return super.getPOV(0) == 270;

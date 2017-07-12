@@ -30,6 +30,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.CANTalon.TalonControlMode;
 
+/**
+ * Used to push motionProfile points to the buffer in the CANTalons and execute them
+ * when the talon is in motion profile mode
+ * 
+ * @author Trevor
+ *
+ */
 public class MotionProfileFollower {
 	
 	/**
@@ -100,10 +107,10 @@ public class MotionProfileFollower {
 	
 
 	/**
-	 * C'tor
 	 * 
-	 * @param talon
-	 *            reference to Talon object to fetch motion profile status from.
+	 * 
+	 * @param talon reference to Talon object to fetch motion profile status from.
+	 * @param pathDt the dt between each point in the path
 	 */
 	public MotionProfileFollower(CANTalon talon, double pathDt) {
 		_talon = talon;
