@@ -1,6 +1,7 @@
 ![logo](https://raw.githubusercontent.com/FRC-Team-955/Team955RobotLib/master/docs/logo.png)
 =====
 Team 955's robot library containing all general code
+
 [Javadoc's](https://frc-team-955.github.io/Team955RobotLib/)
 
 ### Recommended Use
