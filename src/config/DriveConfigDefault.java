@@ -1,4 +1,4 @@
-package drive;
+package config;
 /**
  * Class used to pass into Drive as a config.
  * Create a new class that extends from this one and
@@ -99,6 +99,16 @@ public abstract class DriveConfigDefault {
      */
     public double kFRight = .7;
 
+    /**
+     * The maximum speed that the drive talons are allowed to change each cycle
+     */
+    public double rampRate = 0.5;
+    
+    /**
+     * The wanted time between points on motion profile paths to follow
+     */
+    public double pathDt = 0.2;
+    
     /**
      * Basic constructor that calls setConfig() so that user changed values are updated
      */
