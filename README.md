@@ -8,11 +8,11 @@ Team 955's robot library containing all general code
 - For each of the config classes, overwrite the setConfig() method, and change any values you don't want to use the default for from there
 - Use the singleton architecture for each main part (Drive, Joystick)
 
-'''Java
+```Java
 // Singleton
 private static Drive instance = new Drive();
 
 public static Drive getInstance() {
 	return instance;
 }
-'''
+```
