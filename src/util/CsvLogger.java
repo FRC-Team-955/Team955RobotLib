@@ -255,9 +255,6 @@ public class CsvLogger {
 	 *            determining what to do for "complex" methods
 	 * @param unitName
 	 *            Name of the units for field/column in the output data.
-	 * @param classRef
-	 *            Class where the method is held, such as Joystick.class for
-	 *            getRawButton()
 	 * @param methodName
 	 *            Actual method name to be called for this field, such as
 	 *            "getRawButton"
@@ -427,6 +424,8 @@ public class CsvLogger {
 	 *            A MethodHandle stored in the class level Vector
 	 * @param args
 	 *            Arguments for the given Method Handle
+	 * @param name 
+	 * 			  Name of the method
 	 * @return double value for double return types, 1 or 0 for boolean return types
 	 */
 	private static double getStandardLogData(MethodHandle methodHandle, Vector<Object> args, String name) {
