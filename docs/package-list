@@ -4,4 +4,6 @@ auto.modes
 config
 drive
 util
+util.logging
 util.loops
+util.math
