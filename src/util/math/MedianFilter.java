@@ -17,7 +17,7 @@ public class MedianFilter {
 	int index; // "pointer" to the starting index in the buffer
 
 	/**
-	 * init - initialize all things needed for the averaging filter.
+	 * initialize all things needed for the averaging filter.
 	 * 
 	 * @param length How many inputs to store and average
 	 * @param initVal Initial value to use for the filter

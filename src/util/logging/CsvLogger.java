@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
+import util.loops.Loop;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -47,6 +48,7 @@ public class CsvLogger {
 	static String logName = null;
 	static BufferedWriter logFile = null;
 	static boolean logOpen = false;
+	static String outputDir = "/home/lvuser/logFiles";
 
 	static Vector<String> dataFieldNames = new Vector<String>();
 	static Vector<String> unitNames = new Vector<String>();
@@ -55,6 +57,35 @@ public class CsvLogger {
 	static double lastLeftMotorCurrent = 0;
 	static double lastRightMotorCurrent = 0;
 
+	/**
+	 * Main loop that will log data periodically when running
+	 */
+	private final static Loop loop = new Loop() {
+
+ 		@Override
+ 		public void onStart() {
+ 			init();
+ 		}
+
+ 		@Override
+ 		public void onLoop() {
+ 			logData(false );
+ 		}
+
+ 		@Override
+ 		public void onStop() {
+ 			close();
+ 		}
+ 	};
+ 	
+ 	/**
+ 	 * Use for starting loop through Looper class
+ 	 * @return main control loop
+ 	 */
+ 	public static Loop getLoop () {
+		return loop;
+	}
+	
 	/**
 	 * Clears the IO buffer in memory and forces things to file. Generally a good
 	 * idea to use this as infrequently as possible (because it increases logging
@@ -78,7 +109,6 @@ public class CsvLogger {
 		}
 
 		return 0;
-
 	}
 
 	/**
@@ -142,7 +172,7 @@ public class CsvLogger {
 	 *            Output directory to save the log file that is written
 	 * @return 0 on successful log open, -1 on failure
 	 */
-	public static int init(String outputDir) {
+	public static int init() {
 
 		if (logOpen) {
 			DriverStation.reportWarning("Warning - log is already open!", false);
