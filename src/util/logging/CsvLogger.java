@@ -168,8 +168,6 @@ public class CsvLogger {
 	 * so improper time there will cause oddly-named log files. Takes no action if
 	 * log is already open.
 	 * 
-	 * @param outputDir
-	 *            Output directory to save the log file that is written
 	 * @return 0 on successful log open, -1 on failure
 	 */
 	public static int init() {
