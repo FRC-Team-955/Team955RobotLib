@@ -3,7 +3,7 @@ package util.math;
 import java.util.Arrays;
 
 /**
- * Averaging Filter - Class which defines a simple average filter. After initilization, the "filter()" method 
+ * Class which defines a simple average filter. After initilization, the "filter()" method 
  * can simply be called with the newest input, and the most recent filtered output will be returned.
  * 
  * @author Trevor
